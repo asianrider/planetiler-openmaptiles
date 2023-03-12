@@ -120,6 +120,10 @@ public class Poi implements
   }
 
   private int minzoom(String subclass, String mappingKey) {
+    if ("border_control".equals(subclass))
+      return 5;
+    if ("fuel".equals(subclass))
+      return 7;
     boolean lowZoom = ("station".equals(subclass) && "railway".equals(mappingKey)) ||
       "halt".equals(subclass) || "ferry_terminal".equals(subclass);
     return lowZoom ? 12 : 14;

@@ -267,7 +267,7 @@ public class Place implements
           .putAttrs(names)
           .setAttr(Fields.CLASS, element.place())
           .setAttr(Fields.RANK, rank)
-          .setMinZoom(2)
+          .setMinZoom(6)
           .setSortKey(rank);
       }
     } catch (GeometryException e) {
@@ -324,7 +324,7 @@ public class Place implements
             neCity.names.contains(name) ||
             neCity.names.contains(nameEn) ||
             normalizedName.equals(neCity.name)) {
-            rank = neCity.scaleRank <= 5 ? neCity.scaleRank + 1 : neCity.scaleRank;
+            rank = neCity.scaleRank; //  <= 5 ? neCity.scaleRank + 1 : neCity.scaleRank;
             break;
           }
         }
@@ -339,10 +339,10 @@ public class Place implements
     PlaceType placeType = PlaceType.forName(element.place());
 
     int minzoom = rank != null && rank == 1 ? 2 :
-      rank != null && rank <= 8 ? Math.max(3, rank - 1) :
-      placeType.ordinal() <= PlaceType.TOWN.ordinal() ? 7 :
-      placeType.ordinal() <= PlaceType.VILLAGE.ordinal() ? 8 :
-      placeType.ordinal() <= PlaceType.SUBURB.ordinal() ? 11 : 14;
+      rank != null && rank <= 8 ? Math.max(3, rank - 3) :
+      placeType.ordinal() <= PlaceType.TOWN.ordinal() ? 4 :
+      placeType.ordinal() <= PlaceType.VILLAGE.ordinal() ? 5 :
+      placeType.ordinal() <= PlaceType.SUBURB.ordinal() ? 7 : 8;
 
     var feature = features.point(LAYER_NAME).setBufferPixels(BUFFER_SIZE)
       .putAttrs(OmtLanguageUtils.getNames(element.source().tags(), translations))
@@ -350,7 +350,7 @@ public class Place implements
       .setAttr(Fields.RANK, rank)
       .setMinZoom(minzoom)
       .setSortKey(getSortKey(rank, placeType, element.population(), element.name()))
-      .setPointLabelGridPixelSize(12, 128);
+      .setPointLabelGridPixelSize(12, 10);
 
     if (rank == null) {
       feature.setPointLabelGridLimit(LABEL_GRID_LIMITS);

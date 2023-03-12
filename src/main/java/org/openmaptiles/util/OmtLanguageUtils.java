@@ -77,35 +77,37 @@ public class OmtLanguageUtils {
     Map<String, Object> result = new HashMap<>();
 
     String name = string(tags.get("name"));
-    String intName = string(tags.get("int_name"));
-    String nameEn = string(tags.get("name:en"));
-    String nameDe = string(tags.get("name:de"));
+    // String intName = string(tags.get("int_name"));
+    // String nameEn = string(tags.get("name:en"));
+    // String nameDe = string(tags.get("name:de"));
+    // String nameFr = string(tags.get("name:fr"));
 
-    boolean isLatin = containsOnlyLatinCharacters(name);
-    String latin = isLatin ? name :
-      Stream
-        .concat(Stream.of(nameEn, intName, nameDe), getAllNameTranslationsBesidesEnglishAndGerman(tags))
-        .filter(LanguageUtils::containsOnlyLatinCharacters)
-        .findFirst().orElse(null);
-    if (latin == null && translations != null && translations.getShouldTransliterate()) {
-      latin = transliteratedName(tags);
-    }
-    String nonLatin = isLatin ? null : removeLatinCharacters(name);
-    if (coalesce(nonLatin, "").equals(latin)) {
-      nonLatin = null;
-    }
+    // boolean isLatin = containsOnlyLatinCharacters(name);
+    // String latin = isLatin ? name :
+    //   Stream
+    //     .concat(Stream.of(nameEn, intName, nameDe), getAllNameTranslationsBesidesEnglishAndGerman(tags))
+    //     .filter(LanguageUtils::containsOnlyLatinCharacters)
+    //     .findFirst().orElse(null);
+    // if (latin == null && translations != null && translations.getShouldTransliterate()) {
+    //   latin = transliteratedName(tags);
+    // }
+    // String nonLatin = isLatin ? null : removeLatinCharacters(name);
+    // if (coalesce(nonLatin, "").equals(latin)) {
+    //   nonLatin = null;
+    // }
 
     putIfNotEmpty(result, "name", name);
-    putIfNotEmpty(result, "name_en", coalesce(nameEn, name));
-    putIfNotEmpty(result, "name_de", coalesce(nameDe, name, nameEn));
-    putIfNotEmpty(result, "name:latin", latin);
-    putIfNotEmpty(result, "name:nonlatin", nonLatin);
-    putIfNotEmpty(result, "name_int", coalesce(
-      intName,
-      nameEn,
-      latin,
-      name
-    ));
+    // putIfNotEmpty(result, "name_en", coalesce(nameEn, name));
+    // putIfNotEmpty(result, "name_fr", nameFr);
+    // putIfNotEmpty(result, "name_de", coalesce(nameDe, name, nameEn));
+    // putIfNotEmpty(result, "name:latin", latin);
+    // putIfNotEmpty(result, "name:nonlatin", nonLatin);
+    // putIfNotEmpty(result, "name_int", coalesce(
+    //   intName,
+    //   nameEn,
+    //   latin,
+    //   name
+    // ));
 
     if (translations != null) {
       translations.addTranslations(result, tags);

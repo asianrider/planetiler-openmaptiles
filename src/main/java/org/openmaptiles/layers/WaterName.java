@@ -175,7 +175,7 @@ public class WaterName implements
       try {
         Geometry centerlineGeometry = lakeCenterlines.get(element.source().id());
         FeatureCollector.Feature feature;
-        int minzoom = 9;
+        int minzoom = 7;
         if (centerlineGeometry != null) {
           // prefer lake centerline if it exists
           feature = features.geometry(LAYER_NAME, centerlineGeometry)

@@ -167,18 +167,18 @@ public class Transportation implements
       false
     );
     MINZOOMS = Map.ofEntries(
-      entry(FieldValues.CLASS_PATH, z13Paths ? 13 : 14),
-      entry(FieldValues.CLASS_TRACK, 14),
-      entry(FieldValues.CLASS_SERVICE, 13),
-      entry(FieldValues.CLASS_MINOR, 13),
+      entry(FieldValues.CLASS_PATH, 10),
+      entry(FieldValues.CLASS_TRACK, 8),
+      entry(FieldValues.CLASS_SERVICE, 10),
+      entry(FieldValues.CLASS_MINOR, 7),
       entry(FieldValues.CLASS_RACEWAY, 12),
-      entry(FieldValues.CLASS_TERTIARY, 11),
+      entry(FieldValues.CLASS_TERTIARY, 7),
       entry(FieldValues.CLASS_BUSWAY, 11),
       entry(FieldValues.CLASS_BUS_GUIDEWAY, 11),
-      entry(FieldValues.CLASS_SECONDARY, 9),
-      entry(FieldValues.CLASS_PRIMARY, 7),
-      entry(FieldValues.CLASS_TRUNK, 5),
-      entry(FieldValues.CLASS_MOTORWAY, 4)
+      entry(FieldValues.CLASS_SECONDARY, 5),
+      entry(FieldValues.CLASS_PRIMARY, 5),
+      entry(FieldValues.CLASS_TRUNK, 3),
+      entry(FieldValues.CLASS_MOTORWAY, 3)
     );
   }
 
@@ -375,7 +375,7 @@ public class Transportation implements
         // z12+
         .setAttrWithMinzoom(Fields.SERVICE, service, 12)
         .setAttrWithMinzoom(Fields.ONEWAY, nullIfInt(element.isOneway(), 0), 12)
-        .setAttrWithMinzoom(Fields.SURFACE, surface(element.surface()), 12)
+        .setAttrWithMinzoom(Fields.SURFACE, surface(element.surface()), 6)
         .setMinPixelSize(0) // merge during post-processing, then limit by size
         .setSortKey(element.zOrder())
         .setMinZoom(minzoom);
@@ -401,14 +401,16 @@ public class Transportation implements
     int minzoom;
     if ("pier".equals(element.manMade())) {
       minzoom = 13;
-    } else if (isResidentialOrUnclassified(highway)) {
+    } else if ("unclassified".equals(highway)) {
+      minzoom = 7;
+    } else if ("residential".equals(highway)) {
       minzoom = 12;
     } else {
       String baseClass = highwayClass.replace("_construction", "");
       minzoom = switch (baseClass) {
         case FieldValues.CLASS_SERVICE -> isDrivewayOrParkingAisle(service(element.service())) ? 14 : 13;
-        case FieldValues.CLASS_TRACK, FieldValues.CLASS_PATH -> routeRank == 1 ? 12 :
-          (z13Paths || !nullOrEmpty(element.name()) || routeRank <= 2 || !nullOrEmpty(element.sacScale())) ? 13 : 14;
+        // case FieldValues.CLASS_TRACK, FieldValues.CLASS_PATH -> routeRank == 1 ? 12 :
+        //   (z13Paths || !nullOrEmpty(element.name()) || routeRank <= 2 || !nullOrEmpty(element.sacScale())) ? 13 : 14;
         default -> MINZOOMS.get(baseClass);
       };
     }
